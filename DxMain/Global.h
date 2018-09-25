@@ -1,0 +1,1 @@
+int width=640,height=480,GameState=1;

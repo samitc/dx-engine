@@ -1,0 +1,5 @@
+DxMain/*.fx filter=lfs diff=lfs merge=lfs -text
+DxMain/dx.xml filter=lfs diff=lfs merge=lfs -text
+DxMain/Box.fbx filter=lfs diff=lfs merge=lfs -text
+PerformanceTesting/*.obj filter=lfs diff=lfs merge=lfs -text
+PerformanceTesting/*.fx filter=lfs diff=lfs merge=lfs -text

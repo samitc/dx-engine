@@ -1,0 +1,121 @@
+set(WARPPER_SOURCE
+	inputLayout.cpp
+	VideoOutput.cpp
+	VideoMode.cpp
+	VideoAdapter.cpp
+	RenderState.cpp
+	RenderDevice.cpp
+	MapData.cpp
+	LayoutElement.cpp
+	Device.cpp
+	Data.cpp
+	DXObject.cpp
+	BlendState.cpp
+	GraphicState.cpp
+	ShaderParams.cpp
+	PipeState.cpp
+	DrawCommand.cpp
+	PipeShadersParams.cpp
+	)
+set(WARPPER_HEADER
+	inc/BlendState.h
+	inc/Device.h
+	inc/DxEnums.h
+	inc/DXObject.h
+	inc/DXTypes.h
+	inc/GraphicState.h
+	inc/inputLayout.h
+	inc/LayoutElement.h
+	inc/MapData.h
+	inc/RenderDevice.h
+	inc/RenderState.h
+	inc/VideoAdapter.h
+	inc/VideoMode.h
+	inc/VideoOutput.h
+	inc/DXGame.h
+	inc/ShaderParams.h
+	inc/PipeState.h
+	inc/DrawCommand.h
+	inc/PipeShadersParams.h
+	inc/Data.h
+	)
+SET(MANAGER_SOURCE
+	ResourceManager.cpp
+	GpuResourceManager.cpp)
+SET(MANAGER_HEADER
+	inc/ResourceManager.h
+	inc/ResourceManagerT.cpp
+	inc/GpuResourceManager.h
+	)
+SET(SHADER_SOURCE
+	VertexShader.cpp
+	Shader.cpp
+	PixelShader.cpp
+	HullShader.cpp
+	GeometryStreamOutputShader.cpp
+	Effect.cpp
+	GeometryShader.cpp
+	DomainShader.cpp
+	ComputeShader.cpp)
+SET(SHADER_HEADER
+	inc/Effect.h
+	inc/PixelShader.h
+	inc/Shader.h
+	inc/VertexShader.h
+	inc/ComputeShader.h
+	inc/GeometryShader.h
+	inc/HullShader.h
+	inc/DomainShader.h
+	inc/GeometryStreamOutputShader.h)
+SET(RESOURCE_SOURCE
+	UnorderedViewInfo.cpp
+	UnorderedView.cpp
+	TextureData.cpp
+	Texture2D.cpp
+	Texture.cpp
+	ShaderResourceInfo.cpp
+	ShaderResource.cpp
+	Sampler.cpp
+	ResourceView.cpp
+	Resource.cpp
+	PipeLineRenderTarget.cpp
+	PipeLineDepthStencil.cpp
+	PipeLineBuffer.cpp
+	Buffer.cpp)
+SET(RESOURCE_HEADER
+	inc/Resource.h
+	inc/Sampler.h
+	inc/ResourceView.h
+	inc/Buffer.h
+	inc/ShaderResourceInfo.h
+	inc/ShaderResource.h
+	inc/Texture.h
+	inc/Texture2D.h
+	inc/UnorderedView.h
+	inc/PipeLineBuffer.h
+	inc/PipeLineRenderTarget.h
+	inc/PipeLineDepthStencil.h
+	inc/TextureData.h
+	inc/UnorderedViewInfo.h
+	)
+SET(ALL_WRAPPER_SOURCE
+	${WARPPER_SOURCE}
+	${WARPPER_HEADER}
+	${MANAGER_SOURCE}
+	${MANAGER_HEADER}
+	${SHADER_SOURCE}
+	${SHADER_HEADER}
+	${RESOURCE_SOURCE}
+	${RESOURCE_HEADER}
+	)
+SOURCE_GROUP("managers" FILES ${MANAGER_HEADER} ${MANAGER_SOURCE})
+SOURCE_GROUP("shaders" FILES ${SHADER_HEADER} ${SHADER_SOURCE})
+SOURCE_GROUP("resource" FILES ${RESOURCE_HEADER} ${RESOURCE_SOURCE})
+ADD_LIBRARY(dxWrapper STATIC ${COMMON_SOURCE} ${ALL_WRAPPER_SOURCE})
+add_dependencies(dxWrapper dxMath dxResourceManager)
+target_link_libraries(dxWrapper dxMath dxResourceManager D3D11 DXGI d3dcompiler)
+target_include_directories(dxWrapper PRIVATE ${DxEngine_SOURCE_DIR}/dxgame/inc)#for state
+target_include_directories(dxWrapper PUBLIC ${DxEngine_SOURCE_DIR}/DxWrapper/inc)
+target_link_libraries(dxWrapper
+debug ${EFFECT_DEBUG_LIBRARIES}
+optimized ${EFFECT_RELEASE_LIBRARIES})
