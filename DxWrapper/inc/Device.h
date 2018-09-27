@@ -15,7 +15,6 @@ class RenderResource;
 class UnorderedView;
 class Shader;
 class Data;
-class TextureInfo;
 class VertexShader;
 class PixelShader;
 class InputLayout;

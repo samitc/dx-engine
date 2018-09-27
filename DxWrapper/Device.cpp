@@ -120,10 +120,10 @@ void Device::updateSubresource(ResourceType res, const void *data, unsigned int 
 }
 ShaderResource Device::createShaderResource(const Resource &res, const ShaderResourceInfo &info) const
 {
-	ShaderResourceType srt;
-	ShaderResourceInfoType inf;
-	this->getDX()->getDevice()->CreateShaderResourceView(res.getResource(), info.getShaderResourceInfoType(&inf), &srt);
-	return ShaderResource(srt);
+    ShaderResourceType srt;
+    ShaderResourceInfoType inf;
+    resValid(this->getDX()->getDevice()->CreateShaderResourceView(res.getResource(), info.getShaderResourceInfoType(&inf), &srt));
+    return ShaderResource(srt);
 }
 UnorderedView Device::createUnorderedView(const Resource & res, const UnorderedViewInfo & info) const
 {

@@ -11,6 +11,20 @@
 #include "DxHandler.h"
 #include "Matrix.h"
 #include "ResourceManager.h"
+namespace
+{
+    bool checkUnnecessarySubset(const int *numOfVertex, const int *numOfIndex, const SubSet& subset)
+    {
+        if (numOfIndex == nullptr)
+        {
+            return subset.indexCount == *numOfVertex&&subset.startIndex == 0;
+        }
+        else
+        {
+            return subset.indexCount == *numOfIndex&&subset.startIndex == 0 && subset.startVertex == 0;
+        }
+    }
+}
 Model::Model() :GOEntity()
 {
 }
@@ -95,27 +109,30 @@ std::list<SubSet>& Model::getsubsetStart()
 }
 template<class T> void ModelInit(Model& model, const DXMain & dx, void * vertex, T * index, int sizeOfElements, int numberOfElements, int numberOfIndexes, const std::list<SubSet>& subset)
 {
-	model.vertex = vertex;
-	model.setVbuffer(new Buffer(dx.getResourceManager().createBuffer(numberOfElements, sizeOfElements, ResourceFormat::VERTEX_BUFFER, (Access)(Access::GpuRead | Access::CpuWrite), vertex)));
-	if (index == NULL || numberOfIndexes == 0)
-	{
-		model.setIbuffer(NULL);
-		model.index = nullptr;
-	}
-	else
-	{
-		if (sizeof(T) == sizeof(DWORD))
-		{
-			model.setisDWord(true);
-		}
-		else
-		{
-			model.setisDWord(false);
-		}
-		model.index = index;
-		model.setIbuffer(new Buffer(dx.getResourceManager().createBuffer(numberOfIndexes, sizeof T, ResourceFormat::INDEX_BUFFER, (Access)(Access::GpuRead | Access::CpuWrite), index)));
-	}
-	model.setsubsetStart(subset);
+    model.vertex = vertex;
+    model.setVbuffer(new Buffer(dx.getResourceManager().createBuffer(numberOfElements, sizeOfElements, ResourceFormat::VERTEX_BUFFER, (Access)(Access::GpuRead | Access::CpuWrite), vertex)));
+    if (index == nullptr || numberOfIndexes == 0)
+    {
+        model.setIbuffer(nullptr);
+        model.index = nullptr;
+    }
+    else
+    {
+        if (sizeof(T) == sizeof(DWORD))
+        {
+            model.setisDWord(true);
+        }
+        else
+        {
+            model.setisDWord(false);
+        }
+        model.index = index;
+        model.setIbuffer(new Buffer(dx.getResourceManager().createBuffer(numberOfIndexes, sizeof T, ResourceFormat::INDEX_BUFFER, (Access)(Access::GpuRead | Access::CpuWrite), index)));
+    }
+    if (subset.size() != 1 || !checkUnnecessarySubset(&numberOfElements, model.index == nullptr ? nullptr : &numberOfIndexes, subset.front()))
+    {
+        model.setsubsetStart(subset);
+    }
 }
 template<class T> void ModelInit(Model& model, const DXMain & dx, void * vertex, const T * index, int sizeOfElements, int numberOfElements, int numberOfIndexes, const std::list<SubSet>& subset)
 {

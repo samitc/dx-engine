@@ -17,7 +17,6 @@ class PipeLineDepthStencil;
 class Resource;
 class ShaderResource;
 class ShaderResourceInfo;
-class TextureInfo;
 class UnorderedView;
 class UnorderedViewInfo;
 class Model;

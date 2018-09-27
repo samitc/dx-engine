@@ -4,7 +4,6 @@
 #include "DXTypes.h"
 #include "Engine.h"
 class Resource;
-class TextureInfo;
 class DataManager;
 class Texture :public Resource
 {

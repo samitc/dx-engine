@@ -12,18 +12,18 @@ void InstanceModel::setInstanceBuffer(const Buffer & instance)
 void InstanceModel::prepareRendering(const RenderDevice &renderDevice)
 {
 #ifdef RELEASEC0
-	if (this->getvBuffer() != nullptr)
-	{
+    if (this->getvBuffer() != nullptr)
+    {
 #endif
-		unsigned int *sizeOfBuffers = (unsigned int*)_alloca(2 * sizeof(unsigned int));
-		BufferType *buffers = (BufferType *)_alloca(2 * sizeof(BufferType));
-		buffers[0] = getVbuffer().getBufferType();
-		buffers[1] = buf.getBufferType();
-		sizeOfBuffers[0] = getVbuffer().getSizeOfElement();
-		sizeOfBuffers[1] = buf.getSizeOfElement();
-		renderDevice.getdx().getDevice().setVertexBuffer(0, Device::BufferData(buffers, sizeOfBuffers, 2), 0);
+        unsigned int sizeOfBuffers[2];
+        BufferType *buffers = (BufferType *)_alloca(2 * sizeof(BufferType));
+        buffers[0] = getVbuffer().getBufferType();
+        buffers[1] = buf.getBufferType();
+        sizeOfBuffers[0] = getVbuffer().getSizeOfElement();
+        sizeOfBuffers[1] = buf.getSizeOfElement();
+        renderDevice.getdx().getDevice().setVertexBuffer(0, Device::BufferData(buffers, sizeOfBuffers, 2), 0);
 #ifdef RELEASEC0
-	}
+    }
 #endif
 }
 void InstanceModel::draw(const RenderDevice &renderDevice, int count, int startIndex, int startVertex)

@@ -144,21 +144,28 @@ void BoolsArray::setVal(int posInArray, int posInVal, bool val)
 }
 template<class T> void addItemToArray(const T *item, const T **&arr, unsigned char &count, unsigned char &max)
 {
-	if (count == max)
-	{
-		const T **newArr;
-		max *= 2;
-		if (max > 255)
-		{
-			max = 255;
-		}
-		newArr = new T const*[max];
-		memcpy(newArr, arr, count*sizeof(T*));
-		delete[] arr;
-		arr = newArr;
-	}
-	arr[count] = item;
-	++count;
+    if (count == max)
+    {
+        const T **newArr;
+        if (max > 255 / 2)
+        {
+            if (max == 255)
+            {
+                throw "Not implement";
+            }
+            max = 255;
+        }
+        else
+        {
+            max *= 2;
+        }
+        newArr = new T const*[max];
+        memcpy(newArr, arr, count * sizeof(T*));
+        delete[] arr;
+        arr = newArr;
+    }
+    arr[count] = item;
+    ++count;
 }
 template<class T> void removeNullFromArray(const T **&arr, unsigned char &count)
 {
