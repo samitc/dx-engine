@@ -3,19 +3,19 @@
 #include "DXMain.h"
 Sampler::Sampler(SamplerStateType sampler) :samplerState(sampler)
 {
- 	#ifdef DEBUGC
-	static int number=0;
-	char name[]="Sampler:   ";
-	char *p=name+strlen(name)-1;
-	int num=number++;
-	while (num>0)
+#if CLDLEVEL >= 4
+	static int number = 0;
+	char name[] = "Sampler:   ";
+	char *p = name + strlen(name) - 1;
+	int num = number++;
+	while (num > 0)
 	{
-	 *p=(num%10)+48;
-	 num/=10;
-	 p--;
+		*p = (num % 10) + 48;
+		num /= 10;
+		p--;
 	}
 	sampler->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(name), name);
-	#endif
+#endif
 }
 Sampler::SamplerBuilder::SamplerBuilder():SamplerBuilder(TextureAddressMode::WRAP, TextureAddressMode::WRAP, TextureAddressMode::WRAP, Filter::MIN_MAG_MIP_LINEAR, Comparison::NEVER)
 {

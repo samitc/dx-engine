@@ -39,7 +39,7 @@ DXObject::DXObject(const VideoAdapter *driverTypes, int numOfTypes, FeatureLevel
 	delete[] des;
 	logStr.append(str);
 	BaseLog::getInstance().debug(logStr.c_str());
-	#ifdef DEBUGC
+	#if CLDLEVEL >= 4
 	char * name = "DX device";
 	this->dev->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(name), name);
 	name = "Context";
@@ -53,37 +53,35 @@ DXObject::DXObject(const VideoAdapter *driverTypes, int numOfTypes, FeatureLevel
 }
 DXObject::~DXObject()
 {
-#ifdef RELEASEC0
-	if (this->context != 0)
-	{
+#if CLDLEVEL >= 0
+    if (this->context != 0)
+    {
 #endif
-		this->context->Release();
-#ifdef RELEASEC0
-	}
+        this->context->Release();
+#if CLDLEVEL >= 0
+    }
 #endif
-#ifdef CLDEBUG
-	ID3D11Debug   *m_d3dDebug;
-	this->dev->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_d3dDebug));
-	m_d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-	m_d3dDebug->Release();
-	#endif
-#ifdef CLRELEASE0
-	if (this->dev != 0)
-	{
+#if CLDLEVEL >= 4
+    ID3D11Debug   *m_d3dDebug;
+    this->dev->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_d3dDebug));
+    m_d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+    m_d3dDebug->Release();
 #endif
-		ULONG num = this->dev->Release();
-		#ifdef DEBUGC
-		char strText[100];
-		wchar_t strText1[100];
-		if (num > 0)
-		{
-			itoa(num, strText, 10);
-			mbstowcs(strText1, strText, 100);
-			MessageBox(0, strText1, L"error in clean all objects", MB_OK);
-		}
-		#endif
-#ifdef CLRELEASE0
-	}
+#if CLDLEVEL >= 0
+    if (this->dev != 0)
+    {
+#endif
+        ULONG num = this->dev->Release();
+#if CLDLEVEL >= 0
+        char strText[100];
+        wchar_t strText1[100];
+        if (num > 0)
+        {
+            itoa(num, strText, 10);
+            mbstowcs(strText1, strText, 100);
+            MessageBox(0, strText1, L"error in clean all objects", MB_OK);
+        }
+    }
 #endif
 }
 FormatSupport DXObject::checkFormatSupport(DataFormat format) const

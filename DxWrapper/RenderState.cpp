@@ -6,30 +6,30 @@ RenderState::RenderState():renderState(NULL)
 }
 RenderState::RenderState(const RenderState &copy):renderState(copy.renderState)
 {
-	#ifdef RELEASEC0
+	#if CLDLEVEL >= 0
 	if(this->getRenderState()!=NULL)
 	{
 	#endif
 	 this->getRenderState()->AddRef();
-	#ifdef RELEASEC0
+	#if CLDLEVEL >= 0
 	}
 	#endif
 }
-RenderState::RenderState(RenderStateType renderState):renderState(renderState)
+RenderState::RenderState(RenderStateType renderState) :renderState(renderState)
 {
- 	#ifdef DEBUGC
-	static int number=0;
-	char name[]="Render state:   ";
-	char *p=name+strlen(name)-1;
-	int num=number++;
-	while (num>0)
+#if CLDLEVEL >= 4
+	static int number = 0;
+	char name[] = "Render state:   ";
+	char *p = name + strlen(name) - 1;
+	int num = number++;
+	while (num > 0)
 	{
-	 *p=(num%10)+48;
-	 num/=10;
-	 p--;
+		*p = (num % 10) + 48;
+		num /= 10;
+		p--;
 	}
 	renderState->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(name), name);
-	#endif
+#endif
 }
 RenderState RenderState::RenderStateBuilder::build(const DXMain & dx) const
 {
@@ -46,7 +46,7 @@ RenderState RenderState::RenderStateBuilder::build(const DXMain & dx) const
 	renderStateDesc.ScissorEnable = this->getscissorEnable();
 	renderStateDesc.MultisampleEnable = this->getmultisampleEnable();
 	renderStateDesc.AntialiasedLineEnable = this->getantialiasedLineEnable();
-	return device.createRenderState(renderStateDesc);
+	return RenderState(device.createRenderState(renderStateDesc));
 }
 RenderState::RenderStateBuilder::RenderStateBuilder() :RenderStateBuilder(WIREFRAME, BACK, false, 0)
 {
@@ -75,12 +75,12 @@ RenderState::RenderStateBuilder::RenderStateBuilder(FillMode fill, CullMode cull
 }
 RenderState::~RenderState()
 {
-	#ifdef RELEASEC0
+	#if CLDLEVEL >= 0
 	if(this->getRenderState()!=NULL)
 	{
 	#endif
 		this->getRenderState()->Release();
-	#ifdef RELEASEC0
+	#if CLDLEVEL >= 0
 	}
 	#endif
 }
@@ -92,21 +92,21 @@ RenderState & RenderState::operator=(RenderState & obj)
 {
 	if (this != &obj)
 	{
-	 #ifdef RELEASEC0
+	 #if CLDLEVEL >= 0
   	if(this->getRenderState()!=NULL)
 	 {
 	 #endif
 	  	this->getRenderState()->Release();
-	 #ifdef RELEASEC0
+	 #if CLDLEVEL >= 0
 	 }
 	 #endif
 		this->setRenderState(obj.getRenderState());
-	 #ifdef RELEASEC0
+	 #if CLDLEVEL >= 0
   	if(this->getRenderState()!=NULL)
   	{
   	#endif
   		this->getRenderState()->AddRef();
-	 #ifdef RELEASEC0
+	 #if CLDLEVEL >= 0
 		}
 		#endif
 	}

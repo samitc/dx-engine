@@ -126,7 +126,7 @@ BlendState::BlendState(const BlendState &copy) :blendType(copy.blendType), color
 }
 BlendState::BlendState(const BlendStateType state, const Color &color) :blendType(state), color(new Color(color))
 {
-	#ifdef DEBUGC
+	#if CLDLEVEL >= 4
 	static int number=0;
 	char name[]="Blend state:   ";
 	char *p=name+strlen(name)-1;

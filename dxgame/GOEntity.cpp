@@ -77,14 +77,14 @@ Buffer * GOEntity::setIndexBufferCtor(const Buffer & indexBuffer)
 }
 void GOEntity::prepareRendering(const RenderDevice &renderDevice)
 {
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
 	if (this->Vbuffer != NULL)
 	{
 #endif
 		unsigned int *sizeOfBuffers;
 		BufferType *buffers;
 		renderDevice.getdx().getDevice().setVertexBuffer(0, Device::BufferData(buffers, sizeOfBuffers, this->getBuffers(&buffers, &sizeOfBuffers)), 0);
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
 	}
 #endif
 }

@@ -12,7 +12,7 @@ UnorderedViewType UnorderedView::getResView() const
 UnorderedView::UnorderedView(const UnorderedViewType res)
 {
 	this->setResView(res);
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	static int number = 0;
 	char name[] = "Unordered resource view:   ";
 	char *p = name + strlen(name) - 1;

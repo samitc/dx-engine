@@ -37,13 +37,13 @@ ComputeShader & ComputeShader::operator=(ComputeShader & ass)
 }
 void ComputeShader::prepareForRender(const DXMain & dx) const
 {
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
 	if (this->getComputeShaderType() != NULL)
 	{
 #endif
 		auto &device = dx.getDevice();
 		device.setComputeShader(this->getComputeShaderType());
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
 	}
 #endif
 }
@@ -77,7 +77,7 @@ unsigned int ComputeShader::getNumber() const
 }
 ComputeShader::ComputeShader(std::vector<byte> &&data, ComputeShaderType shader) :Shader(std::move(data)), computeShader(shader)
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	static int number = 0;
 	char name[] = "Vertex shader:   ";
 	char *p = name + strlen(name) - 1;

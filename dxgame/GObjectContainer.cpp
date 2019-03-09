@@ -75,6 +75,14 @@ GObjectContainer::GObjectContainer()
 }
 GObjectContainer::~GObjectContainer()
 {
+	for (const auto& g : gObjects)
+	{
+		delete g.first;
+	}
+	for (const auto& u : uObjects)
+	{
+		delete u;
+	}
 }
 GObjectContainer::GObjectContainer(GObjectContainer &&m) :gObjects(std::move(m.gObjects)), uObjects(std::move(m.uObjects))
 {
@@ -94,7 +102,7 @@ void GObjectContainer::render(const RenderDevice &renderDevice)
 }
 void GObjectContainer::addObject(GObject* ob, const DrawCommand&drawCommand)
 {
-#ifdef CLDEBUG
+#if CLDLEVEL >= 4
 	if (ob != NULL)
 	{
 		if (std::find_if(this->gObjects.begin(), this->gObjects.end(), [ob, &drawCommand](const auto& obj)
@@ -104,14 +112,14 @@ void GObjectContainer::addObject(GObject* ob, const DrawCommand&drawCommand)
 		{
 #endif
 			gObjects.push_back(std::pair<GObject*, DrawCommand>(ob, drawCommand));
-#ifdef CLDEBUG
+#if CLDLEVEL >= 4
 		}
 	}
 #endif
 }
 void GObjectContainer::addObject(UObject * ob)
 {
-#ifdef CLDEBUG
+#if CLDLEVEL >= 4
 	if (ob != NULL)
 	{
 		if (std::find_if(this->uObjects.begin(), this->uObjects.end(), [ob](const auto& obj)
@@ -121,14 +129,14 @@ void GObjectContainer::addObject(UObject * ob)
 		{
 #endif
 			uObjects.push_back(ob);
-#ifdef CLDEBUG
+#if CLDLEVEL >= 4
 	}
 }
 #endif
 }
 const std::vector<Shader*> GObjectContainer::addObjectS(GObject * ob, const DrawCommand &drawCommand)
 {
-#ifdef CLDEBUG
+#if CLDLEVEL >= 4
 	if (ob != NULL)
 	{
 		if (std::find_if(this->gObjects.begin(), this->gObjects.end(), [ob, &drawCommand](const auto& obj)
@@ -139,7 +147,7 @@ const std::vector<Shader*> GObjectContainer::addObjectS(GObject * ob, const Draw
 #endif
 			gObjects.push_back(std::pair<GObject*, DrawCommand>(ob, drawCommand));
 			return gObjects[gObjects.size() - 1].second.getpipe().getshaders();
-#ifdef CLDEBUG
+#if CLDLEVEL >= 4
 		}
 	}
 #endif

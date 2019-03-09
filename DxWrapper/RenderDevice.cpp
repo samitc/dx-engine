@@ -58,7 +58,7 @@ RenderDevice::RenderDevice(DXMain &dx, HWND hwnd, const VideoMode videoMode, UIN
 	}
 	BaseLog::getInstance().debug("created swap chain");
 	this->init(w, h);
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	static int number = 0;
 	char name[] = "Swap chain:   ";
 	char *p = name + strlen(name) - 1;
@@ -142,7 +142,7 @@ void RenderDevice::applyRenderTargets() const
 {
 	RenderTargetViewType renderTargets;
 	DepthStencilViewType depthTargets = nullptr;
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	if (this->depthStencil.get() != NULL)
 	{
 #endif
@@ -159,7 +159,7 @@ void RenderDevice::applyRenderTargets() const
 			renderTargets = (RenderTargetViewType)renderTarget->getRenderTarget();
 			depthTargets = depthStencil->getDepthStencil();
 		}
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	}
 #endif
 	dx.getDx().getContext()->OMSetRenderTargets(1, &renderTargets, depthTargets);
@@ -178,18 +178,18 @@ void RenderDevice::clearDepthStencil() const
 }
 void RenderDevice::ClearColor(const Color &col) const
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	if (this->renderTarget.get() != NULL)
 	{
 #endif
 		dx.getDx().getContext()->ClearRenderTargetView(this->renderTarget->getRenderTarget(), col.getFloat(*dx.getShortPoolMemory()));
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	}
 #endif
 }
 void RenderDevice::ClearDepthStencil(bool needClearDepth, float clearDepth, bool needClearStencil, UINT8 clearStencil) const
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	if (this->depthStencil.get() != NULL)
 	{
 #endif
@@ -203,7 +203,7 @@ void RenderDevice::ClearDepthStencil(bool needClearDepth, float clearDepth, bool
 			flags |= D3D11_CLEAR_STENCIL;
 		}
 		dx.getDx().getContext()->ClearDepthStencilView(this->depthStencil->getDepthStencil(), flags, clearDepth, clearStencil);
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	}
 #endif
 }

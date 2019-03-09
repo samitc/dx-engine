@@ -305,12 +305,12 @@ Texture2DType Device::createTexture2D(const TextureDesc & desc) const
 }
 void Device::copyResource(ResourceType resTo, ResourceType resFrom) const
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	if (this->getDX()->getContext() != NULL)
 	{
 #endif
 		this->getDX()->getContext()->CopyResource(resTo, resFrom);
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	}
 #endif
 }

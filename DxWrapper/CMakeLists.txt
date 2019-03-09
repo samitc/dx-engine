@@ -44,7 +44,6 @@ SET(MANAGER_SOURCE
 	GpuResourceManager.cpp)
 SET(MANAGER_HEADER
 	inc/ResourceManager.h
-	inc/ResourceManagerT.cpp
 	inc/GpuResourceManager.h
 	)
 SET(SHADER_SOURCE

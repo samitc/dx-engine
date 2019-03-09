@@ -7,7 +7,7 @@
 #include "ShaderState.h"
 VertexShader::VertexShader(std::vector<byte>&& dat, VertexShaderType shader) :Shader(std::move(dat)), vertexShader(shader)
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	static int number = 0;
 	char name[] = "Vertex shader:   ";
 	char *p = name + strlen(name) - 1;
@@ -54,13 +54,13 @@ VertexShader &VertexShader::operator=(VertexShader& ass)
 }
 void VertexShader::prepareForRender(const DXMain &dx) const
 {
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
 		if (this->getVertexShaderType() != NULL)
 		{
 #endif
 			auto &device = dx.getDevice();
 			device.setVertexShader(this->getVertexShaderType());
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
 		}
 #endif
 }

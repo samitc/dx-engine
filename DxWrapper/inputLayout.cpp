@@ -54,12 +54,12 @@ bool InputLayout::operator==(const InputLayout &in) const
 InputLayout::InputLayoutBuilder::InputLayoutBuilder()
 {
 }
-InputLayout::InputLayout() :InputLayout(nullptr)
+InputLayout::InputLayout() :inputLayout(nullptr)
 {
 }
 InputLayout::InputLayout(InputLayoutType inputLayout) :inputLayout(inputLayout)
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	static int number = 0;
 	char name[] = "Input layout:   ";
 	char *p = name + strlen(name) - 1;

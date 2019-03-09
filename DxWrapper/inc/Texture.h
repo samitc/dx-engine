@@ -7,12 +7,6 @@ class Resource;
 class DataManager;
 class Texture :public Resource
 {
-protected:
-	struct LoadData
-	{
-		const TextureInfo *data;
-		const Device *device;
-	};
 public://public for everyone
 	Texture();
 	Texture(const Texture&);

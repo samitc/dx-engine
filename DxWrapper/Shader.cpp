@@ -140,7 +140,7 @@ byte * Shader::save(const Shader *shader, int *size)
 	void *data;
 	const void *aData = nullptr;
 	unsigned int aSize
-#ifdef _DEBUG
+#if !defined(NDEBUG)
 		= 0
 #endif
 		;

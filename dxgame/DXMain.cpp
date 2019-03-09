@@ -13,13 +13,9 @@
 #include "ResourceManager.h"
 DXMain::DXMain() :pipeLine(std::make_unique<PipeLineState>()), shortPool(std::make_unique<ShortPoolMemory>()), dxHandler(std::make_unique<DxHandler>(*this)), resourceManager(std::make_unique<ResourceManager>(*this)), gpuManager(std::make_unique<GpuResourceManager>(*this, *resourceManager))
 {
-#if RELEASEC0
-	this->DX = std::unique_ptr<DXObject>(nullptr);
-	this->device = std::unique_ptr<Device>(nullptr);
-	this->BackgrountColor = std::unique_ptr<Color>(nullptr);
-#endif
-#if RELEASEC3
-	this->renderDevice = std::unique_ptr<RenderDevice>(nullptr);
+#if CLDLEVEL >= 0
+    this->DX = std::unique_ptr<DXObject>(nullptr);
+    this->device = std::unique_ptr<Device>(nullptr);
 #endif
 }
 DXMain::~DXMain()
@@ -36,7 +32,7 @@ bool DXMain::initDXObject(const VideoAdapter *driverTypes, int numOfTypes, Featu
 }
 bool DXMain::initDevice()
 {
-#if RELEASEC0
+#if CLDLEVEL >= 0
 	if (this->DX.get() == NULL)
 	{
 		return false;
@@ -51,7 +47,7 @@ RenderDevice DXMain::createRenderDevice(HWND hwnd, const VideoMode &videoMode)
 }
 RenderDevice DXMain::createRenderDevice(HWND hwnd, const VideoMode &videoMode, UINT sampleCount, UINT sampleQuality)
 {
-#if RELEASEC0
+#if CLDLEVEL >= 0
 	if (this->device.get() == NULL)
 	{
 		throw "not implement";

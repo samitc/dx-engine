@@ -64,7 +64,7 @@ public://public for engine
 protected:
 	void setRenderState(RenderStateType state);
 private:
-	RenderState(RenderStateType renderState);
+	explicit RenderState(RenderStateType renderState);
 	RenderStateType renderState;
 };
 #endif

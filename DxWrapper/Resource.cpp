@@ -5,41 +5,41 @@ Resource::Resource(const Resource &copy):resource(copy.resource)
 {
 	this->getResource()->AddRef();
 }
-Resource::Resource(ResourceType resource):resource(resource)
+Resource::Resource(ResourceType resource) : resource(resource)
 {
- 	#ifdef DEBUGC
-	static int number=0;
-	char name[]="Resource:   ";
-	char *p=name+strlen(name)-1;
-	int num=number++;
-	while (num>0)
+#if CLDLEVEL >= 4
+	static int number = 0;
+	char name[] = "Resource:   ";
+	char *p = name + strlen(name) - 1;
+	int num = number++;
+	while (num > 0)
 	{
-	 *p=(num%10)+48;
-	 num/=10;
-	 p--;
+		*p = (num % 10) + 48;
+		num /= 10;
+		p--;
 	}
 	resource->SetPrivateData(WKPDID_D3DDebugObjectName, strlen(name), name);
-	#endif
+#endif
 }
 Resource::~Resource()
 {
-#ifdef RELEASEC3
+#if CLDLEVEL >= 3
 	if (this->getResource() != nullptr)
 	{
 #endif
 		this->getResource()->Release();
-#ifdef RELEASEC3
+#if CLDLEVEL >= 3
 	}
 #endif
 }
 void Resource::updateResourceData(const DXMain &dx, const void *data, unsigned int subRes, unsigned int dataRow, unsigned int dataDepth)
 {
-#ifdef RELEASEC3
+#if CLDLEVEL >= 3
 	if (this->getResource() != NULL)
 	{
 #endif
 		dx.getDevice().updateSubresource(this->getResource(), data, subRes, dataRow, dataDepth);
-#ifdef RELEASEC3
+#if CLDLEVEL >= 3
 	}
 #endif
 }

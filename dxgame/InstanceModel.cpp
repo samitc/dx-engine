@@ -11,7 +11,7 @@ void InstanceModel::setInstanceBuffer(const Buffer & instance)
 }
 void InstanceModel::prepareRendering(const RenderDevice &renderDevice)
 {
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
     if (this->getvBuffer() != nullptr)
     {
 #endif
@@ -22,7 +22,7 @@ void InstanceModel::prepareRendering(const RenderDevice &renderDevice)
         sizeOfBuffers[0] = getVbuffer().getSizeOfElement();
         sizeOfBuffers[1] = buf.getSizeOfElement();
         renderDevice.getdx().getDevice().setVertexBuffer(0, Device::BufferData(buffers, sizeOfBuffers, 2), 0);
-#ifdef RELEASEC0
+#if CLDLEVEL >= 0
     }
 #endif
 }

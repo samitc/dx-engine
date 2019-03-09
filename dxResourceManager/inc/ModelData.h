@@ -98,7 +98,6 @@ class ModelData
 {
 public:
 	ModelData() = default;
-	ModelData(std::vector<ModelDat> &&models,std::vector<Node> &&nodes);
 	~ModelData() = default;
 	ModelData(ModelData&&) = default;
 	ModelData(const ModelData&) = default;

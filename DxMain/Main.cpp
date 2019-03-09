@@ -33,6 +33,7 @@
 #include "ResourceManager.h"
 #include "GpuResourceManager.h"
 #include "ShaderParams.h"
+#include "Device.h"
 #include "PipeShadersParams.h"
 using namespace DirectX;
 namespace Colors
@@ -64,7 +65,6 @@ HINSTANCE hInstance;
 int nCmdShow;
 DXMain *main;
 RenderDevice* renderDevice;
-PipeShadersParams shadParams;
 Buffer createBuffer(UINT numOfEle, UINT sizeOfEle, ResourceFormat format, Access access, const void* data)
 {
     return main->getResourceManager().createBuffer(numOfEle, sizeOfEle, format, access, data);
@@ -331,13 +331,18 @@ Buffer createDataI(DXMain &main)
 }
 class MModel :public Model
 {
+public:
+	MModel(PipeShadersParams &shadParams):shadParams(shadParams)
+	{
+	}
     void prepareRendering(const RenderDevice &renderDevice) override
     {
         shadParams.apply(renderDevice.getdx().getDevice());
         Model::prepareRendering(renderDevice);
     }
+	PipeShadersParams &shadParams;
 };
-class UModel :public Model, public UObject
+class UModel : public UObject
 {
 public:
     UModel(MapData &data) :mapData(data)
@@ -439,17 +444,17 @@ int WINAPI WinMain(HINSTANCE Instance, HINSTANCE hPreviousInstance, LPSTR lpcmdl
         renderDevice->setBackgroundColor(255, 0, 0);
         renderDevice->setAllowAltEnterFullScreen(false);
         {
+            PipeShadersParams shadParams;
             RenderState rs = RenderState::RenderStateBuilder(RenderState::RenderStateBuilder::FillMode::WIREFRAME).build(*main);
             PixelShader ps = PixelShader::createPixelShader(*main, L"pinkColor.fx", "PS_Main", PsModel::PS4_0);
             VertexShader vs = VertexShader::createVertexShader(*main, L"pinkColor.fx", "VS_Main", VsModel::VS4_0);
-            MModel *m = new MModel();
+            MModel *m = new MModel(shadParams);
             Model::ModelBuilderFromResource("Box.fbx").build(*main, m);
             Buffer bbuf = createDataV1(*main);
             MapData mapData = MapData(bbuf);
             GOEntity *obj1 = new  GOEntity(bbuf, createDataI(*main));
             GOEntity *obj2 = new  GOEntity(createDataV2(*main));
             Sampler sam = Sampler::SamplerBuilder(TextureAddressMode::WRAP, TextureAddressMode::WRAP, TextureAddressMode::WRAP, Filter::MIN_MAG_MIP_LINEAR, Comparison::NEVER).build(*main);
-            
             shadParams.getpixelParams().addSampler(sam);
             Matrix projMatrix_ = Matrix::PerspectiveFovLH(0.785398163f, 640.0f / height, 0.01f, 100.0f).transpose();
             Matrix viewMatrix_;

@@ -8,7 +8,7 @@
 #include "ShaderState.h"
 PixelShader::PixelShader(std::vector<byte> &&dat,PixelShaderType shader) :Shader(std::move(dat)), pixelShader(shader)
 {
-#ifdef DEBUGC
+#if CLDLEVEL >= 4
 	static int number = 0;
 	char name[] = "Pixel Shader:   ";
 	char *p = name + strlen(name) - 1;
