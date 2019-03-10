@@ -19,7 +19,7 @@ namespace GeneralTesting
     }
     TEST(TimeTesting, manyFrames)
     {
-        const int TOTAL_TIME = 80;
+        const int TOTAL_TIME = 5;
         GameTime gt = GameTime();
         gt.GameStart();
         auto nowTime = std::chrono::steady_clock::now();
@@ -52,7 +52,7 @@ namespace GeneralTesting
     }
     TEST(TimeTesting, totalTime)
     {
-        const int TOTAL_TIME = 120;
+        const int TOTAL_TIME = 8;
         GameTime gt = GameTime();
         gt.GameStart();
         auto nowTime = std::chrono::steady_clock::now();
@@ -105,9 +105,5 @@ namespace GeneralTesting
         gt.StartRender();
         ASSERT_NEAR((double)TOTAL_TIME, (double)gt.getSecondSinceLastRender(), (double)TIME_DIFREENCE) << "Error getting total update";
         gt.EndRender();
-    }
-    TEST(TimeTesting, startStop)
-    {
-        //TOOD
     }
 }

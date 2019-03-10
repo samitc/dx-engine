@@ -1,5 +1,7 @@
 #include "GObjectContainer.h"
 #include <algorithm>
+#include <set>
+#include "EObject.h"
 #include "GraphicState.h"
 #include "DXMain.h"
 #include "Device.h"
@@ -75,13 +77,14 @@ GObjectContainer::GObjectContainer()
 }
 GObjectContainer::~GObjectContainer()
 {
-	for (const auto& g : gObjects)
+    std::set<EObject*> objects(uObjects.cbegin(), uObjects.cend());
+    for (const auto& g : gObjects)
+    {
+        objects.insert(g.first);
+    }
+	for (const auto& o : objects)
 	{
-		delete g.first;
-	}
-	for (const auto& u : uObjects)
-	{
-		delete u;
+		delete o;
 	}
 }
 GObjectContainer::GObjectContainer(GObjectContainer &&m) :gObjects(std::move(m.gObjects)), uObjects(std::move(m.uObjects))

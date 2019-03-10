@@ -39,7 +39,7 @@ bool ObjModel::LoadOBJ( char *fileName )
     std::ifstream fileStream;
     int fileSize = 0;
 
-    fileStream.open( fileName, std::ifstream::in );
+    fileStream.open(fileName, std::ifstream::in | std::ifstream::binary);
    
     if( fileStream.is_open( ) == false )
         return false;
@@ -91,25 +91,6 @@ bool ObjModel::LoadOBJ( char *fileName )
 
             lineStream.GetNextToken( &token, lineDelimiters, 2 );
             verts.push_back( ( float )atof( token.c_str( ) ) );
-        }
-        else if( strcmp( token.c_str( ), "vn" ) == 0 )
-        {
-            /*lineStream.GetNextToken( &token, lineDelimiters, 2 );
-            norms.push_back( ( float )atof( token.c_str( ) ) );
-
-            lineStream.GetNextToken( &token, lineDelimiters, 2 );
-            norms.push_back( ( float )atof( token.c_str( ) ) );
-
-            lineStream.GetNextToken( &token, lineDelimiters, 2 );
-            norms.push_back( ( float )atof( token.c_str( ) ) );*/
-        }
-        else if( strcmp( token.c_str( ), "vt" ) == 0 )
-        {
-            /*lineStream.GetNextToken( &token, lineDelimiters, 2 );
-            texC.push_back( ( float )atof( token.c_str( ) ) );
-
-            lineStream.GetNextToken( &token, lineDelimiters, 2 );
-            texC.push_back( ( float )atof( token.c_str( ) ) );*/
         }
         else if( strcmp( token.c_str( ), "f" ) == 0 )
         {

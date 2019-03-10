@@ -5,7 +5,7 @@ class EObject
 {
 public:
 	EObject();
-	~EObject() = default;
+	virtual ~EObject() = default;
 protected://for engine
 	bool getBit(char bit) const;
 	void setBit(char bit);
