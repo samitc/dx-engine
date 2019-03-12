@@ -40,6 +40,7 @@ public:
 	void setOutputBuffer(const Buffer& buffer);
 	GeometryStreamOutputShader(std::vector<byte> &&, GeometryShaderType);
 	const byte* getSoData(unsigned int *size) const;
+    virtual bool operator==(const Shader&) const;
 private:
 	GeometryStreamOutputShader(std::vector<byte> &&, GeometryShaderType, std::vector<D3D11_SO_DECLARATION_ENTRY>&&);
 	std::vector<D3D11_SO_DECLARATION_ENTRY> dec;

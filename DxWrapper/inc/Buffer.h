@@ -14,6 +14,7 @@ public://public for everyone
 	int getSizeOfElement() const;
 	int getNumberOfElements() const;
 	Buffer& operator=(const Buffer& buf);
+    bool operator==(const Buffer&) const;
 public://public for engine
 	BufferType getBufferType() const;
 	Buffer(BufferType buffer, int numberOfElement, int sizeOfElement);

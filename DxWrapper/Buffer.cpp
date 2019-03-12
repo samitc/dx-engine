@@ -52,3 +52,8 @@ Buffer & Buffer::operator=(const Buffer & buf)
 	}
 	return *this;
 }
+
+bool Buffer::operator==(const Buffer &buf) const
+{
+    return getBufferType()==buf.getBufferType();
+}

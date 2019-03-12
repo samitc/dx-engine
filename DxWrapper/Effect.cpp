@@ -165,6 +165,10 @@ void Effect::setTechnique(const char * tec)
 	}
 	strcpy(t, tec);
 }
+bool Effect::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && this->geteffect() == ((Effect&)shad).geteffect();
+}
 BYTE * Effect::getInputSignature(SIZE_T & size) const
 {
 	EffectPassDesc d;

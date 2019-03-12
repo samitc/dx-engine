@@ -11,7 +11,7 @@
 #include "PipeLineState.h"
 #include "GpuResourceManager.h"
 #include "ResourceManager.h"
-DXMain::DXMain() :pipeLine(std::make_unique<PipeLineState>()), shortPool(std::make_unique<ShortPoolMemory>()), dxHandler(std::make_unique<DxHandler>(*this)), resourceManager(std::make_unique<ResourceManager>(*this)), gpuManager(std::make_unique<GpuResourceManager>(*this, *resourceManager))
+DXMain::DXMain() :shortPool(std::make_unique<ShortPoolMemory>()), dxHandler(std::make_unique<DxHandler>(*this)), resourceManager(std::make_unique<ResourceManager>(*this)), gpuManager(std::make_unique<GpuResourceManager>(*this, *resourceManager))
 {
 #if CLDLEVEL >= 0
     this->DX = std::unique_ptr<DXObject>(nullptr);
@@ -92,10 +92,6 @@ const ResourceManager & DXMain::getResourceManager() const
 const GpuResourceManager & DXMain::getGpuResourceManager() const
 {
 	return *gpuManager;
-}
-PipeLineState* DXMain::getPipeLineState() const
-{
-	return pipeLine.get();
 }
 ShortPoolMemory* DXMain::getShortPoolMemory() const
 {

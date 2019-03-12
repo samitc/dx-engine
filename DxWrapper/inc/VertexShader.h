@@ -34,6 +34,7 @@ public://public for everyone
 	static VertexShader createVertexShader(const DXMain &dx, const Data &data);
 	virtual ~VertexShader();
 	virtual VertexShader* clone() const;
+    virtual bool operator==(const Shader&) const;
 	VertexShader &operator=(VertexShader& ass);
 	void prepareForRender(const DXMain &dx) const;
 	//convert the shader model to string that represent the level

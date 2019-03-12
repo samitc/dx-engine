@@ -184,7 +184,7 @@ template<class T> void removeNullFromArray(const T **&arr, unsigned char &count)
 	count = freePos - arr;
 }
 PipeLineState::PipeLineState() :State(), vBuffer(nullptr), iBuffer(nullptr),
-input(), topology((PrimitiveTopology)0), shaders(new Shader const*[3]), shaderMax(3), shaderCount(0), states(new GraphicState const*[3]), stateMax(3), stateCount(0), hasShaderChange(), hasStateChange()
+input(), topology((PrimitiveTopology)0), shaders(new Shader const*[3]), shaderMax(3), shaderCount(0), states(new GraphicState const*[3]), stateMax(3), stateCount(0), hasShaderChange(), hasStateChange(), needToResetState(false)
 {
 }
 PipeLineState::~PipeLineState()
@@ -194,6 +194,7 @@ void PipeLineState::setGraphicState(const GraphicState * state)
 {
 	if (!this->getChange(WAS_JUST_RESET_STATE))
 	{
+        this->needToResetState = false;
 		unsigned char i = 0;
 		for (; i < stateCount; i++)
 		{
@@ -238,7 +239,7 @@ void PipeLineState::addShader(const Shader *shader)
 			addItemToArray(shader, shaders, shaderCount, shaderMax);
 			hasShaderChange.push_back(true);
 		}
-		else if(shader!=shaders[i])
+		else if(*shader!=*shaders[i])
 		{
 			shaders[i] = shader;
 			hasShaderChange.setVal(i, true);
@@ -298,8 +299,11 @@ void PipeLineState::apply(const DXMain & dx)
 	}
 	if (hasStateChange.size()==0)
 	{
-		device.setRenderState(nullptr);
-		device.setBlendState(nullptr, Color(0.0f, 0.0f, 0.0f));
+        if (needToResetState)
+        {
+            device.setRenderState(nullptr);
+            device.setBlendState(nullptr, Color(0.0f, 0.0f, 0.0f));
+        }
 	}
 	else
 	{
@@ -343,80 +347,84 @@ bool PipeLineState::hasChanged() const
 }
 void PipeLineState::reset(const GraphicState* state, const std::vector<Shader*> &shaders)
 {
-	this->setChange(WAS_JUST_RESET_SHADER);
-	this->setChange(WAS_JUST_RESET_STATE);
-	if (state==nullptr)
-	{
-		stateCount = 0;
-		this->hasStateChange.clear();
-	}
-	else
-	{
-		bool wasAdded = false;
-		for (unsigned char i = 0; i < stateCount; i++)
-		{
-			if (states[i] != state)
-			{
-				states[i] = nullptr;
-			}
-		}
-		removeNullFromArray(states, stateCount);
-		this->hasStateChange.clear();
-		if (stateCount == 0)
-		{
-			addItemToArray(state, states, stateCount, stateMax);
-			hasStateChange.push_back(true);
-		}
-		else
-		{
-			hasStateChange.push_back(false);
-		}
-	}
-	if (shaders.size()==0)
-	{
-		shaderCount = 0;
-		this->hasShaderChange.clear();
-	}
-	else
-	{
-		BoolsArray boolsVal;
-		boolsVal.resize(shaders.size());
-		for (unsigned char i = 0; i < shaderCount; i++)
-		{
-			bool wasAdded = false;
-			int index = 0;
-			for (const auto &shad : shaders)
-			{
-				if (shad->getName()[0] == this->shaders[i]->getName()[0])
-				{
-					if (shad == this->shaders[i])
-					{
-						boolsVal.setVal(index, true);
-						wasAdded = true;
-					}
-					break;
-				}
-				++index;
-			}
-			if (!wasAdded)
-			{
-				this->shaders[i] = nullptr;
-			}
-		}
-		removeNullFromArray(this->shaders, shaderCount);
-		this->hasShaderChange.resize(shaderCount, false);
-		auto &conShad = shaders.cbegin();
-		{
-			for (size_t i = 0; i < boolsVal.size(); i++)
-			{
-				auto wasAdd = boolsVal[i];
-				if (!wasAdd)
-				{
-					addItemToArray(*conShad, this->shaders, shaderCount, shaderMax);
-					this->hasShaderChange.push_back(true);
-				}
-				++conShad;
-			}
-		}
-	}
+    this->setChange(WAS_JUST_RESET_SHADER);
+    this->setChange(WAS_JUST_RESET_STATE);
+    if (state == nullptr)
+    {
+        if (stateCount > 0)
+        {
+            needToResetState = true;
+            stateCount = 0;
+            this->hasStateChange.clear();
+        }
+    }
+    else
+    {
+        bool wasAdded = false;
+        for (unsigned char i = 0; i < stateCount; i++)
+        {
+            if (states[i] != state)
+            {
+                states[i] = nullptr;
+            }
+        }
+        removeNullFromArray(states, stateCount);
+        this->hasStateChange.clear();
+        if (stateCount == 0)
+        {
+            addItemToArray(state, states, stateCount, stateMax);
+            hasStateChange.push_back(true);
+        }
+        else
+        {
+            hasStateChange.push_back(false);
+        }
+    }
+    if (shaders.size() == 0)
+    {
+        shaderCount = 0;
+        this->hasShaderChange.clear();
+    }
+    else
+    {
+        BoolsArray boolsVal;
+        boolsVal.resize(shaders.size());
+        for (unsigned char i = 0; i < shaderCount; i++)
+        {
+            bool wasAdded = false;
+            int index = 0;
+            for (const auto &shad : shaders)
+            {
+                if (shad->getName()[0] == this->shaders[i]->getName()[0])
+                {
+                    if (*shad == *this->shaders[i])
+                    {
+                        boolsVal.setVal(index, true);
+                        wasAdded = true;
+                    }
+                    break;
+                }
+                ++index;
+            }
+            if (!wasAdded)
+            {
+                this->shaders[i] = nullptr;
+            }
+        }
+        removeNullFromArray(this->shaders, shaderCount);
+        this->hasShaderChange.resize(shaderCount, false);
+        auto &conShad = shaders.cbegin();
+        {
+            for (size_t i = 0; i < boolsVal.size(); i++)
+            {
+                auto wasAdd = boolsVal[i];
+                if (!wasAdd)
+                {
+                    addItemToArray(*conShad, this->shaders, shaderCount, shaderMax);
+                    this->hasShaderChange.push_back(true);
+                }
+                ++conShad;
+            }
+        }
+    }
 }

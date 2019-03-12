@@ -61,6 +61,10 @@ const byte * GeometryStreamOutputShader::getSoData(unsigned int *size) const
 	*size = dec.size()*sizeof(D3D11_SO_DECLARATION_ENTRY);
 	return (const byte*)&dec[0];
 }
+bool GeometryStreamOutputShader::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && this->outputBuffer == ((GeometryStreamOutputShader&)shad).outputBuffer;
+}
 GeometryStreamOutputShader::GeometryStreamOutputShader(std::vector<byte>&&dat, GeometryShaderType s, std::vector<D3D11_SO_DECLARATION_ENTRY>&&dec) : GeometryStreamOutputShader(std::move(dat), s)
 {
 	dec = std::move(dec);

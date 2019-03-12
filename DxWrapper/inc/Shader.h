@@ -22,6 +22,8 @@ public://public for everyone
 	static Data compileShader(const UTF8 *path, const char *startFunction, const char *shaderModel);
 	void saveShader(const DataManager &manager, const DXMain &dx, const char *id) const;
 	static Shader* loadShader(const DataManager &manager, const DXMain &dx, const char *id);
+    virtual bool operator==(const Shader&) const = 0;
+    bool operator!=(const Shader&) const;
 public://public for engine
 	virtual void prepareForRender(const DXMain &dx) const = 0;
 	virtual bool checkIsMe(const char *name) const = 0;

@@ -43,6 +43,10 @@ PixelShader* PixelShader::clone() const
 {
 	return new PixelShader(*this);
 }
+bool PixelShader::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && getPixelShaderType() == ((PixelShader&)shad).getPixelShaderType();
+}
 PixelShader &PixelShader::operator=(PixelShader& ass)
 {
 	if (this != &ass)

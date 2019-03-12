@@ -75,12 +75,10 @@ public:
 public://public for engine
 	DXObject& getDx() const;
 	Device &getDevice() const;
-	PipeLineState* getPipeLineState() const;
 	ShortPoolMemory* getShortPoolMemory() const;
 private:
 	std::unique_ptr<DXObject> DX;
 	std::unique_ptr<Device> device;
-	std::unique_ptr<PipeLineState> pipeLine;
 	std::unique_ptr<ShortPoolMemory> shortPool;
 	std::unique_ptr<DxHandler> dxHandler;
 	std::unique_ptr<ResourceManager> resourceManager;

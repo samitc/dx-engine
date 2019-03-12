@@ -33,6 +33,7 @@ public:
 	static DomainShader createDomainShader(const DXMain &dx, const Data &data);
 	//convert the shader model to string that represent the level
 	static const char* convertDsModelToString(DsModel model);
+    virtual bool operator==(const Shader&) const;
 public://public for engine
 	bool checkIsMe(const char *name) const override;
 	char* getName() const override;

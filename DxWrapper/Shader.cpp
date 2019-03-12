@@ -124,6 +124,10 @@ Shader * Shader::loadShader(const DataManager & manager, const DXMain & dx, cons
 {
 	return manager.loadStaticParams<Shader, const Device>(id, &dx.getDevice());
 }
+bool Shader::operator!=(const Shader &shad) const
+{
+    return !(*this == shad);
+}
 template <class T> void combineDat(void *dst, const void *src, int *dstS, unsigned int srcS)
 {
 	if (src!=nullptr)

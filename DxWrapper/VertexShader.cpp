@@ -42,6 +42,10 @@ VertexShader* VertexShader::clone() const
 {
 	return new VertexShader(*this);
 }
+bool VertexShader::operator==(const Shader &shad) const
+{
+    return this->getNumber() == shad.getNumber() && this->getVertexShaderType() == ((VertexShader&)shad).getVertexShaderType();
+}
 VertexShader &VertexShader::operator=(VertexShader& ass)
 {
 	if (this != &ass)

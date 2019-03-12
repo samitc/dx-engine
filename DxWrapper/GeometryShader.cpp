@@ -26,6 +26,10 @@ const char * GeometryShader::convertGsModelToString(GsModel model)
 	};
 	return models[(int)model];
 }
+bool GeometryShader::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && geometryShader == ((GeometryShader&)shad).geometryShader;
+}
 bool GeometryShader::checkIsMe(const char * name) const
 {
 	return name[0] == 'g' || name[0] == 'G';

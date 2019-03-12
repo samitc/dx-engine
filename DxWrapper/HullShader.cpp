@@ -39,6 +39,10 @@ const char * HullShader::convertHsModelToString(HsModel model)
 	};
 	return models[(int)model];
 }
+bool HullShader::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && hullShader == ((HullShader&)shad).hullShader;
+}
 bool HullShader::checkIsMe(const char * name) const
 {
 	return name[0] == 'h' || name[0] == 'H';

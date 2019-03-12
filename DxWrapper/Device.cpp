@@ -21,7 +21,7 @@
 #include "DrawCommand.h"
 #include "PipeState.h"
 #include "GraphicState.h"
-Device::Device(DXMain &dx) :dx(&dx)
+Device::Device(DXMain &dx) :dx(&dx), pipeLine(std::make_unique<PipeLineState>())
 {
 }
 Device::~Device()
@@ -56,15 +56,15 @@ void Device::applyViewport(float topLeftX, float topLeftY, float width, float he
 }
 void Device::setDrawCommand(const DrawCommand &draw)
 {
-	const PipeState& pipe = draw.getpipe();
-	GraphicState *s = pipe.getstates().size() > 0 ? pipe.getstates()[0] : nullptr;
-	dx->getPipeLineState()->reset(s, pipe.getshaders());
-	for (const auto& state : pipe.getstates())
-	{
-		dx->getPipeLineState()->setGraphicState(state);
-	}
-	dx->getPipeLineState()->setInputLayout(draw.getlayout());
-	dx->getPipeLineState()->setPrimitiveTopology(draw.gettopology());
+    const PipeState& pipe = draw.getpipe();
+    GraphicState *s = pipe.getstates().size() > 0 ? pipe.getstates()[0] : nullptr;
+    pipeLine->reset(s, pipe.getshaders());
+    for (const auto& state : pipe.getstates())
+    {
+        pipeLine->setGraphicState(state);
+    }
+    pipeLine->setInputLayout(draw.getlayout());
+    pipeLine->setPrimitiveTopology(draw.gettopology());
 }
 PixelShaderType Device::createPixelShader(const void *data, unsigned int size) const
 {
@@ -175,8 +175,8 @@ void Device::soSetBuffer(int count, BufferType * buffers) const
 	this->getDX()->getContext()->SOSetTargets(count, buffers, nullptr);
 }
 void Device::setVertexBuffer(unsigned int startSlot, const Device::BufferData &buffer, unsigned int offset) const
-	{
-	this->getDX()->getContext()->IASetVertexBuffers(startSlot, buffer.numOfBuffers, buffer.buffers, buffer.sizeOfBuffers, &offset);
+{
+    this->getDX()->getContext()->IASetVertexBuffers(startSlot, buffer.numOfBuffers, buffer.buffers, buffer.sizeOfBuffers, &offset);
 }
 void Device::setIndexBuffer(const BufferType &buffer, unsigned int offset, int sizeOfIndex) const
 {
@@ -195,22 +195,22 @@ void Device::setPrimitiveTopology(PrimitiveTopology primitive) const
 }
 void Device::drawIndexBuffer(unsigned int count, unsigned int startIndex, unsigned int baseVertexIndex) const
 {
-	dx->getPipeLineState()->apply(*dx);
+    pipeLine->apply(*dx);
 	this->getDX()->getContext()->DrawIndexed(count, startIndex, baseVertexIndex);
 }
 void Device::drawBuffer(unsigned int count, unsigned int startIndex) const
 {
-	dx->getPipeLineState()->apply(*dx);
+    pipeLine->apply(*dx);
 	this->getDX()->getContext()->Draw(count, startIndex);
 }
 void Device::drawInstance(unsigned int vertexCountPerInstance, unsigned int instanceCount, unsigned int startVertexLocation, unsigned int startInstanceLocation) const
 {
-	dx->getPipeLineState()->apply(*dx);
+    pipeLine->apply(*dx);
 	getDX()->getContext()->DrawInstanced(vertexCountPerInstance, instanceCount, startVertexLocation, startInstanceLocation);
 }
 void Device::drawIndexInstance(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int baseVertexLocation, unsigned int startInstanceLocation) const
 {
-	dx->getPipeLineState()->apply(*dx);
+    pipeLine->apply(*dx);
 	getDX()->getContext()->DrawIndexedInstanced(indexCountPerInstance, instanceCount, startIndexLocation, baseVertexLocation, startInstanceLocation);
 }
 void Device::setVertexShader(const VertexShaderType shader) const

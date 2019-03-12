@@ -33,6 +33,7 @@ public:
 	static HullShader createHullShader(const DXMain &dx, const Data &data);
 	//convert the shader model to string that represent the level
 	static const char* convertHsModelToString(HsModel model);
+    virtual bool operator==(const Shader&) const;
 public://public for engine
 	bool checkIsMe(const char *name) const override;
 	char* getName() const override;

@@ -135,5 +135,6 @@ protected:
 private:
 	Device& operator=(Device& obj) = delete;
 	DXMain* dx;
+    std::unique_ptr<PipeLineState> pipeLine;
 };
 #endif

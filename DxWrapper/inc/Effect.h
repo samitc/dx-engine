@@ -69,6 +69,7 @@ public:
 	//	offset:the offset from the begging of the data to start reading
 	void setDataVar(const char* varName, const void *data, unsigned int count, unsigned int offset = 0);
 	void setTechnique(const char* tec);
+    virtual bool operator==(const Shader&) const;
 public://for engine
 	Effect(std::vector<byte> &&dat, DxEffect effect, const char *t);
 	virtual bool checkIsMe(const char *name) const;

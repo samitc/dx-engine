@@ -59,6 +59,10 @@ const char * ComputeShader::convertCsModelToString(CsModel model)
 	};
 	return models[(int)model];
 }
+bool ComputeShader::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && getComputeShaderType() == ((ComputeShader&)shad).getComputeShaderType();
+}
 bool ComputeShader::checkIsMe(const char * name) const
 {
 	return name[0] == 'c' || name[0] == 'C';

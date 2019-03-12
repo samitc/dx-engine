@@ -57,6 +57,7 @@ private:
 	unsigned char stateCount;
 	BoolsArray hasShaderChange;
 	BoolsArray hasStateChange;
+    bool needToResetState;
 	const Buffer* vBuffer;
 	const Buffer* iBuffer;
 	InputLayout input;

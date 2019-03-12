@@ -42,6 +42,10 @@ const char * DomainShader::convertDsModelToString(DsModel model)
 	};
 	return models[(int)model];
 }
+bool DomainShader::operator==(const Shader &shad) const
+{
+    return getNumber() == shad.getNumber() && domainShader == ((DomainShader&)shad).domainShader;
+}
 bool DomainShader::checkIsMe(const char * name) const
 {
 	return name[0] == 'd' || name[0] == 'D';
