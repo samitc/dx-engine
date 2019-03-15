@@ -6,13 +6,15 @@ class Buffer;
 class ShaderResource;
 class Sampler;
 class PipeShadersParams;
+class DXMain;
 class ShaderParams
 {
 public:
 	ShaderParams() = default;
 	~ShaderParams() = default;
 	int addConstantBuffer(const Buffer &);
-	void updateConstantBuffer(int handle, const Buffer &);
+    void updateConstantBuffer(int handle, const Buffer &);
+    void updateConstantBuffer(int handle,const DXMain&, const void*);
 	void clearConstantBuffer();
 	int addShaderResource(const ShaderResource&);
 	void updateShaderResource(int handle, const ShaderResource&);

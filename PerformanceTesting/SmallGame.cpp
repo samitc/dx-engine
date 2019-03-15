@@ -78,18 +78,16 @@ namespace PerformanceTesting
                 _aligned_free(p);
             }
         }
-            BalModel(float startX, float startY, PipeShadersParams &shadParams, int hnd) :Model()
+            BalModel(const RenderDevice& renderDevice,float startX, float startY, PipeShadersParams &shadParams, int hnd) :Model()
         {
-            m = Matrix().scale(0.7f, 0.7f, 0.7f);
-            m = m.translation(startX, startY, 0);
-            m = m.transpose();
+            m = Matrix().scale(0.7f, 0.7f, 0.7f).translation(startX, startY, 0).transpose();
             param = shadParams;
             handle = hnd;
+            Buffer newData = renderDevice.getdx().getResourceManager().createBuffer(1, sizeof(Matrix), ResourceFormat::CONSTANT_BUFFER, Access::GpuRead, &m);
+            param.getvertexParams().updateConstantBuffer(handle, newData);
         }
         void prepareRendering(const RenderDevice &renderDevice) override
         {
-            Buffer newData = renderDevice.getdx().getResourceManager().createBuffer(1, sizeof(Matrix), ResourceFormat::CONSTANT_BUFFER, Access::GpuRead, &m);
-            param.getvertexParams().updateConstantBuffer(handle, newData);
             param.apply(renderDevice.getdx().getDevice());
             Model::prepareRendering(renderDevice);
         }
@@ -144,10 +142,8 @@ namespace PerformanceTesting
         void prepareRendering(const RenderDevice &renderDevice) override
         {
             Matrix m;
-            m = m.translation(loc, -0.5, 9);
-            m = m.transpose();
-            Buffer newData = renderDevice.getdx().getResourceManager().createBuffer(1, sizeof(Matrix), ResourceFormat::CONSTANT_BUFFER, Access::GpuRead, &m);
-            param.getvertexParams().updateConstantBuffer(hnd, newData);
+            m = m.translation(loc, -0.5, 9).transpose();
+            param.getvertexParams().updateConstantBuffer(hnd, renderDevice.getdx(), &m);
             param.apply(renderDevice.getdx().getDevice());
             Model::prepareRendering(renderDevice);
         }
@@ -240,16 +236,16 @@ namespace PerformanceTesting
                 shaderParams.getvertexParams().addConstantBuffer(bufview);
                 shaderParams.getvertexParams().addConstantBuffer(bufproj);
                 Model::ModelBuilderFromResource ballBuilder("Sphere.obj");
-                BalModel *b = new BalModel(-4, 2.6f, shaderParams, worldHandle);
+                BalModel *b = new BalModel(renderDevice,-4, 2.6f, shaderParams, worldHandle);
                 ballBuilder.build(main, b);
                 g.addObject(b, drawCommand);
-                b = new BalModel(-4, -2.6f, shaderParams, worldHandle);
+                b = new BalModel(renderDevice, -4, -2.6f, shaderParams, worldHandle);
                 ballBuilder.build(main, b);
                 g.addObject(b, drawCommand);
-                b = new BalModel(4, -2.6f, shaderParams, worldHandle);
+                b = new BalModel(renderDevice, 4, -2.6f, shaderParams, worldHandle);
                 ballBuilder.build(main, b);
                 g.addObject(b, drawCommand);
-                b = new BalModel(4, 2.6f, shaderParams, worldHandle);
+                b = new BalModel(renderDevice, 4, 2.6f, shaderParams, worldHandle);
                 ballBuilder.build(main, b);
                 g.addObject(b, drawCommand);
                 CatModel * m = new CatModel(true, 0, shaderParams, worldHandle);

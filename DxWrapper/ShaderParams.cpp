@@ -18,6 +18,11 @@ void ShaderParams::updateConstantBuffer(int handle, const Buffer &buf)
 	constantBuffers[handle] = buf;
 }
 
+void ShaderParams::updateConstantBuffer(int handle, const DXMain& main, const void *data)
+{
+    constantBuffers[handle].updateResourceData(main, data);
+}
+
 void ShaderParams::clearConstantBuffer()
 {
 	constantBuffers.clear();

@@ -302,8 +302,6 @@ namespace PerformanceTesting
         {
             RECT dimensions;
             GetClientRect(hwnd, &dimensions);
-            unsigned int width = dimensions.right - dimensions.left;
-            unsigned int height = dimensions.bottom - dimensions.top;
             D3D_DRIVER_TYPE driverTypes[] =
             {
                 D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP, D3D_DRIVER_TYPE_SOFTWARE
@@ -319,8 +317,8 @@ namespace PerformanceTesting
             DXGI_SWAP_CHAIN_DESC swapChainDesc;
             ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
             swapChainDesc.BufferCount = 1;
-            swapChainDesc.BufferDesc.Width = width;
-            swapChainDesc.BufferDesc.Height = height;
+            swapChainDesc.BufferDesc.Width = w;
+            swapChainDesc.BufferDesc.Height = h;
             swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
             swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
             swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -355,8 +353,8 @@ namespace PerformanceTesting
                 backBufferTexture->Release();
             D3D11_TEXTURE2D_DESC depthTexDesc;
             ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));
-            depthTexDesc.Width = width;
-            depthTexDesc.Height = height;
+            depthTexDesc.Width = w;
+            depthTexDesc.Height = h;
             depthTexDesc.MipLevels = 1;
             depthTexDesc.ArraySize = 1;
             depthTexDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -375,8 +373,8 @@ namespace PerformanceTesting
             result = d3dDevice_->CreateDepthStencilView(depthTexture_, &descDSV, &depthStencilView_);
             d3dContext_->OMSetRenderTargets(1, &backBufferTarget_, depthStencilView_);
             D3D11_VIEWPORT viewport;
-            viewport.Width = static_cast<float>(width);
-            viewport.Height = static_cast<float>(height);
+            viewport.Width = static_cast<float>(w);
+            viewport.Height = static_cast<float>(h);
             viewport.MinDepth = 0.0f;
             viewport.MaxDepth = 1.0f;
             viewport.TopLeftX = 0.0f;
@@ -601,7 +599,13 @@ namespace PerformanceTesting
             DXMain main;
             QueryPerformanceCounter((LARGE_INTEGER*)&p.startLoadContant);
             VideoAdapter adapter = VideoAdapter::getAdapters()[0];
-            main.initDXObject(adapter, FeatureLevel::DX_10_0, true);
+            FeatureLevel features[] =
+            {
+                FeatureLevel::DX_11_0,
+                FeatureLevel::DX_10_1,
+                FeatureLevel::DX_10_0
+            };
+            main.initDXObject(&adapter, 1, features, 3, true);
             main.initDevice();
             std::vector<VideoMode> vid = VideoOutput(adapter.getAllOutput()[0]).getVideosMode(DataFormat::R8G8B8A8_UNORM);
             size_t videoIndex = 0;
